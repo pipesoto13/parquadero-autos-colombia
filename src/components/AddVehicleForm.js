@@ -9,7 +9,7 @@ const initialState = {
   status: '',
   owner: '',
 };
-export const WebsiteForm = (props) => {
+export const AddVehicleForm = (props) => {
   const [registerForm, setRegisterForm] = useState(initialState);
   const params = useParams();
   const navigate = useNavigate();
@@ -21,14 +21,14 @@ export const WebsiteForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await registerVehicle(registerForm);
-    toast('New Link Added', {
+    //await registerVehicle(registerForm);
+    toast('Vehículo registrado exitosamente ', {
       type: 'success',
     });
 
     // Clean Form
     setRegisterForm(initialState);
-    navigate('/');
+    navigate('/vehicles');
   };
 
   // const getLinkById = async (id) => {
@@ -47,7 +47,7 @@ export const WebsiteForm = (props) => {
   // }, [params.id]);
 
   return (
-    <div className='col-md-4 offset-md-4'>
+    <div className='col-md-6'>
       <form onSubmit={handleSubmit} className='card card-body bg-secondary'>
         <label htmlFor='type'>Tipo de vehículo</label>
         <div className='input-group mb-3'>

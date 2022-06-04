@@ -10,12 +10,12 @@ function Layout() {
     <>
       <Navbar />
       <div className='container p-4'>
-        <div className='row'>
+        <div className='row justify-content-center'>
           <Outlet />
         </div>
         <ToastContainer />
       </div>
-      <div className='container p-4'>
+      {/* <div className='container p-4'>
         <div className='d-grid gap-4 col-4 mx-auto'>
           <Link
             className='d-flex align-items-center btn btn-primary shadow-none'
@@ -25,7 +25,7 @@ function Layout() {
             Registrar vehículo
           </Link>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
