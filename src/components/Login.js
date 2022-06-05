@@ -7,6 +7,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
+import { useAuth } from '../context/AuthContext';
+
 import {
   collection,
   getDocs,
@@ -16,16 +18,30 @@ import {
   where,
   onSnapshot,
 } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { app } from '../firebase/config';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+
+const auth = getAuth(app);
 
 const initialState = {
-  id: '',
+  email: '',
   password: '',
 };
 
 function Login() {
   const [loginForm, setLoginForm] = useState(initialState);
+  const [isRegistered, setIsRegistered] = useState(false);
   const navigate = useNavigate();
+
+  const { user } = useAuth();
+
+  if (user) {
+    console.log('usuario logeado');
+  }
 
   const handleInputChange = ({ target: { name, value } }) => {
     setLoginForm({ ...loginForm, [name]: value });
@@ -33,13 +49,29 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(loginForm);
+
+    // if (isRegistered) {
+    //   await createUserWithEmailAndPassword(
+    //     auth,
+    //     loginForm.email,
+    //     loginForm.password
+    //   );
+    //   setIsRegistered(true);
+    // } else {
+    //   await signInWithEmailAndPassword(
+    //     auth,
+    //     loginForm.email,
+    //     loginForm.password
+    //   );
+    // }
+
     navigate('home');
 
     toast('Login exitoso ', {
       type: 'success',
     });
 
-    // console.log(loginForm.id);
     // const querySnapshot = query(
     //   collection(db, 'users'),
     //   where('userId', '==', loginForm.id)
@@ -69,24 +101,22 @@ function Login() {
     <>
       <div className='col-md-6'>
         <form onSubmit={handleSubmit} className='card card-body bg-secondary'>
-          <label htmlFor='id'>ID:</label>
+          <label htmlFor='email'>Email:</label>
           <div className='input-group mb-3'>
             <input
-              type='text'
+              type='email'
               className='form-control'
-              placeholder='cc'
-              name='id'
+              name='email'
               onChange={handleInputChange}
-              value={loginForm.id}
+              value={loginForm.email}
             />
           </div>
 
           <label htmlFor='password'>Contraseña:</label>
           <div className='input-group'>
             <input
-              type='text'
+              type='password'
               name='password'
-              placeholder='EER456'
               className='form-control mb-3'
               onChange={handleInputChange}
               value={loginForm.password}
