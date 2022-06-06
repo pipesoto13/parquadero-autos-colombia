@@ -14,12 +14,35 @@ import { db } from './config';
 
 const vehiclesCollectionName = 'vehicles';
 const usersCollectionName = 'users';
+const accessLeavingCollectionName = 'accessLeaving';
+const slotsCollectionName = 'slots';
 
 export const registerVehicle = (newVehicle) =>
   addDoc(collection(db, vehiclesCollectionName), newVehicle);
 
-export const updateWebsite = (id, updatedFields) =>
-  updateDoc(doc(db, vehiclesCollectionName, id), updatedFields);
+export const registerUser = (newVehicle) =>
+  addDoc(collection(db, usersCollectionName), newVehicle);
+
+export const registerAccesLeaving = (info) =>
+  addDoc(collection(db, accessLeavingCollectionName), info);
+
+export const getVehicles = () =>
+  getDocs(collection(db, vehiclesCollectionName));
+
+export const getUsers = () => getDocs(collection(db, usersCollectionName));
+
+export const getAccessLeaving = () =>
+  getDocs(collection(db, accessLeavingCollectionName));
+
+export const getSlots = () => getDocs(collection(db, slotsCollectionName));
+
+export const deleteVehicle = (id) =>
+  deleteDoc(doc(db, vehiclesCollectionName, id));
+
+export const deleteUser = (id) => deleteDoc(doc(db, usersCollectionName, id));
+
+export const updateSlot = (id, updatedFields) =>
+  updateDoc(doc(db, slotsCollectionName, id), updatedFields);
 
 export const onGetLinks = (callback) => {
   const unsub = onSnapshot(collection(db, vehiclesCollectionName), callback);

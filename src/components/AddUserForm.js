@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { registerVehicle } from '../firebase/api';
-import { useParams, useNavigate } from 'react-router-dom';
+import { registerUser } from '../firebase/api';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const initialState = {
@@ -9,10 +9,8 @@ const initialState = {
   email: '',
   password: '',
 };
-export const AddUserForm = (props) => {
-  const [error, setError] = useState('');
+export const AddUserForm = () => {
   const [registerForm, setRegisterForm] = useState(initialState);
-  const params = useParams();
   const navigate = useNavigate();
 
   const { signup } = useAuth();
@@ -22,38 +20,23 @@ export const AddUserForm = (props) => {
   };
 
   const handleSubmit = async (e) => {
+    const { email, name, password } = registerForm;
     e.preventDefault();
-    console.log(registerForm);
-    setError('');
     try {
-      await signup(registerForm.email, registerForm.password);
-      //await registerVehicle(registerForm);
+      await signup(email, password);
+      await registerUser({ name, email });
       toast('Usuario registrado exitosamente ', {
         type: 'success',
       });
 
-      // Clean Form
       setRegisterForm(initialState);
       navigate('/users');
     } catch (error) {
-      setError(error.message);
+      toast(error.message, {
+        type: 'error',
+      });
     }
   };
-
-  // const getLinkById = async (id) => {
-  //   try {
-  //     const doc = await getWebsite(id);
-  //     setRegisterForm({ ...doc.data() });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (params.id) {
-  //     getLinkById(params.id);
-  //   }
-  // }, [params.id]);
 
   return (
     <div className='col-md-6'>

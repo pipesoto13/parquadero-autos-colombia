@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { registerVehicle } from '../firebase/api';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const initialState = {
   type: '',
@@ -11,54 +11,56 @@ const initialState = {
 };
 export const AddVehicleForm = (props) => {
   const [registerForm, setRegisterForm] = useState(initialState);
-  const params = useParams();
   const navigate = useNavigate();
 
   const handleInputChange = ({ target: { name, value } }) => {
+    if (name === 'plate') {
+      value = value.toUpperCase();
+    }
+    setRegisterForm({ ...registerForm, [name]: value });
+  };
+
+  const handleSelectChange = ({ target: { name, value } }) => {
     setRegisterForm({ ...registerForm, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { type, plate, status, owner } = registerForm;
 
-    //await registerVehicle(registerForm);
-    toast('Vehículo registrado exitosamente ', {
-      type: 'success',
-    });
+    try {
+      if (!type || !plate || !status || !owner) {
+        throw new Error('Falta algún dato del formrulario');
+      }
+      await registerVehicle(registerForm);
+      toast('Vehículo registrado exitosamente ', {
+        type: 'success',
+      });
 
-    // Clean Form
-    setRegisterForm(initialState);
-    navigate('/vehicles');
+      setRegisterForm(initialState);
+      navigate('/vehicles');
+    } catch (error) {
+      toast(error.message, {
+        type: 'error',
+      });
+    }
   };
-
-  // const getLinkById = async (id) => {
-  //   try {
-  //     const doc = await getWebsite(id);
-  //     setRegisterForm({ ...doc.data() });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (params.id) {
-  //     getLinkById(params.id);
-  //   }
-  // }, [params.id]);
 
   return (
     <div className='col-md-6'>
       <form onSubmit={handleSubmit} className='card card-body bg-secondary'>
-        <label htmlFor='type'>Tipo de vehículo</label>
-        <div className='input-group mb-3'>
-          <input
-            type='text'
-            className='form-control'
-            placeholder='carro o moto'
+        <label htmlFor='type'>
+          Tipo de vehículo:
+          <select
+            className='form-select'
             name='type'
-            onChange={handleInputChange}
-          />
-        </div>
+            onChange={handleSelectChange}
+          >
+            <option value=''>Selecciona un tipo</option>
+            <option value='Automovil'>Carro</option>
+            <option value='Motocicleta'>Moto</option>
+          </select>
+        </label>
 
         <label htmlFor='plate'>Placa:</label>
         <div className='input-group'>
@@ -71,16 +73,18 @@ export const AddVehicleForm = (props) => {
           />
         </div>
 
-        <label htmlFor='status'>Novedad:</label>
-        <div className='input-group'>
-          <input
-            type='text'
+        <label htmlFor='status'>
+          Novedad:
+          <select
+            className='form-select'
             name='status'
-            placeholder='true or false'
-            className='form-control mb-3'
-            onChange={handleInputChange}
-          ></input>
-        </div>
+            onChange={handleSelectChange}
+          >
+            <option value=''>Selecciona un valor</option>
+            <option value={true}>Si</option>
+            <option value={false}>No</option>
+          </select>
+        </label>
 
         <label htmlFor='owner'>Propietario:</label>
         <div className='input-group'>

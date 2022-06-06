@@ -17,6 +17,9 @@ function Vehicles() {
       <Link to='/vehicles/list' className='btn btn-primary btn-block'>
         Listar Vehículos
       </Link>
+      <Link to='/vehicles/access-leaving' className='btn btn-primary btn-block'>
+        Listar Entradas/Salidas
+      </Link>
     </div>
   );
 }

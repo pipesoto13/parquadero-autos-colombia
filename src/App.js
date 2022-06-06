@@ -1,4 +1,3 @@
-import { WebsiteList } from './components/ListVehicles';
 import { AddVehicleForm } from './components/AddVehicleForm';
 import { AccessVehicleForm } from './components/AccessVehicleForm';
 import { LeavingVehicleForm } from './components/LeavingVehicleForm';
@@ -19,6 +18,8 @@ import { AuthProvider } from './context/AuthContext';
 
 import { app } from './firebase//config';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { ListAccessLeaving } from './components/ListAccessLeaving';
 
 const auth = getAuth(app);
 
@@ -38,36 +39,115 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path='/' element={<Layout />}>
-            {/*             
-            {!!user ? (
-              <Route exact path='home' element={<Home />} />
-            ) : (
-              <Route index element={<Login />} />
-            )} */}
-            <Route exact path='home' element={<Home />} />
             <Route index element={<Login />} />
-            <Route exact path='vehicles' element={<Vehicles />} />
-            <Route exact path='vehicles/add' element={<AddVehicleForm />} />
+            <Route
+              exact
+              path='home'
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='vehicles'
+              element={
+                <ProtectedRoute>
+                  <Vehicles />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='vehicles/add'
+              element={
+                <ProtectedRoute>
+                  <AddVehicleForm />
+                </ProtectedRoute>
+              }
+            />
             <Route
               exact
               path='vehicles/edit/:id'
-              element={<AddVehicleForm />}
+              element={
+                <ProtectedRoute>
+                  <AddVehicleForm />
+                </ProtectedRoute>
+              }
             />
             <Route
               exact
               path='vehicles/access'
-              element={<AccessVehicleForm />}
+              element={
+                <ProtectedRoute>
+                  <AccessVehicleForm />
+                </ProtectedRoute>
+              }
             />
             <Route
               exact
               path='vehicles/leaving'
-              element={<LeavingVehicleForm />}
+              element={
+                <ProtectedRoute>
+                  <LeavingVehicleForm />
+                </ProtectedRoute>
+              }
             />
-            <Route exact path='vehicles/list' element={<ListVehicles />} />
-            <Route exact path='users' element={<Users />} />
-            <Route exact path='users/add' element={<AddUserForm />} />
-            <Route exact path='users/list' element={<ListUsers />} />
-            <Route exact path='slots/list' element={<ListSlots />} />
+            <Route
+              exact
+              path='vehicles/list'
+              element={
+                <ProtectedRoute>
+                  <ListVehicles />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='users'
+              element={
+                <ProtectedRoute>
+                  <Users />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='users/add'
+              element={
+                <ProtectedRoute>
+                  <AddUserForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='users/list'
+              element={
+                <ProtectedRoute>
+                  <ListUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='slots/list'
+              element={
+                <ProtectedRoute>
+                  <ListSlots />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='vehicles/access-leaving'
+              element={
+                <ProtectedRoute>
+                  <ListAccessLeaving />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </AuthProvider>

@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { registerVehicle } from '../firebase/api';
-import { useParams, useNavigate } from 'react-router-dom';
+import { registerAccesLeaving } from '../firebase/api';
+import { useNavigate } from 'react-router-dom';
 
 const initialState = {
   plate: '',
   date: '',
   time: '',
+  access: null,
 };
 export const LeavingVehicleForm = (props) => {
   const [registerForm, setRegisterForm] = useState(initialState);
-  const params = useParams();
   const navigate = useNavigate();
 
   const handleInputChange = ({ target: { name, value } }) => {
@@ -19,32 +19,25 @@ export const LeavingVehicleForm = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(registerForm);
+    const { plate, date, time } = registerForm;
 
-    //await registerVehicle(registerForm);
-    toast('Salida registrada exitosamente ', {
-      type: 'success',
-    });
+    try {
+      if (!plate || !date || !time) {
+        throw new Error('Falta algún dato del formrulario');
+      }
+      await registerAccesLeaving({ ...registerForm, access: false });
+      toast('Salida registrada exitosamente ', {
+        type: 'success',
+      });
 
-    // Clean Form
-    setRegisterForm(initialState);
-    navigate('/vehicles');
+      setRegisterForm(initialState);
+      navigate('/vehicles');
+    } catch (error) {
+      toast(error.message, {
+        type: 'error',
+      });
+    }
   };
-
-  // const getLinkById = async (id) => {
-  //   try {
-  //     const doc = await getWebsite(id);
-  //     setRegisterForm({ ...doc.data() });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (params.id) {
-  //     getLinkById(params.id);
-  //   }
-  // }, [params.id]);
 
   return (
     <div className='col-md-6'>
@@ -82,12 +75,7 @@ export const LeavingVehicleForm = (props) => {
           ></input>
         </div>
 
-        <button
-          className='btn btn-primary btn-block'
-          // disabled={!registerForm.type || !registerForm.name}
-        >
-          Registrar Salida
-        </button>
+        <button className='btn btn-primary btn-block'>Registrar Salida</button>
       </form>
     </div>
   );

@@ -1,31 +1,9 @@
-import { Navbar } from './Navbar';
-import { Outlet } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { AiOutlineSave, AiFillCar } from 'react-icons/ai';
-import { getUser } from '../firebase/api';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 import { useAuth } from '../context/AuthContext';
-
-import {
-  collection,
-  getDocs,
-  getDoc,
-  doc,
-  query,
-  where,
-  onSnapshot,
-} from 'firebase/firestore';
-import { app } from '../firebase/config';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
-
-const auth = getAuth(app);
 
 const initialState = {
   email: '',
@@ -34,43 +12,32 @@ const initialState = {
 
 function Login() {
   const [loginForm, setLoginForm] = useState(initialState);
-  const [isRegistered, setIsRegistered] = useState(false);
   const navigate = useNavigate();
 
-  const { user } = useAuth();
-
-  if (user) {
-    console.log('usuario logeado');
-  }
+  const { login } = useAuth();
 
   const handleInputChange = ({ target: { name, value } }) => {
     setLoginForm({ ...loginForm, [name]: value });
   };
 
   const handleSubmit = async (e) => {
+    const { email, password } = loginForm;
+
     e.preventDefault();
-    console.log(loginForm);
 
-    // if (isRegistered) {
-    //   await createUserWithEmailAndPassword(
-    //     auth,
-    //     loginForm.email,
-    //     loginForm.password
-    //   );
-    //   setIsRegistered(true);
-    // } else {
-    //   await signInWithEmailAndPassword(
-    //     auth,
-    //     loginForm.email,
-    //     loginForm.password
-    //   );
-    // }
+    try {
+      await login(email, password);
+      toast('Login exitoso ', {
+        type: 'success',
+      });
 
-    navigate('home');
-
-    toast('Login exitoso ', {
-      type: 'success',
-    });
+      setLoginForm(initialState);
+      navigate('home');
+    } catch (error) {
+      toast(error.message, {
+        type: 'error',
+      });
+    }
 
     // const querySnapshot = query(
     //   collection(db, 'users'),
