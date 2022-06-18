@@ -12,6 +12,9 @@ function Home() {
       <Link to='/slots/list' className='btn btn-primary btn-block'>
         Gestion de celdas
       </Link>
+      <Link to='/payments' className='btn btn-primary btn-block'>
+        Gestion de pagos
+      </Link>
     </div>
   );
 }

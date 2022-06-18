@@ -1,16 +1,19 @@
 import { AddVehicleForm } from './components/AddVehicleForm';
 import { AccessVehicleForm } from './components/AccessVehicleForm';
+import { AddPaymentForm } from './components/AddPaymentForm';
 import { LeavingVehicleForm } from './components/LeavingVehicleForm';
 import { ListVehicles } from './components/ListVehicles';
 import { AddUserForm } from './components/AddUserForm';
 import { ListUsers } from './components/ListUsers';
 import { ListSlots } from './components/ListSlots';
+import { ListPayments } from './components/ListPayments';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Layout from './components/Layout';
 import Home from './components/Home';
 import Vehicles from './components/Vehicles';
 import Users from './components/Users';
+import Payments from './components/Payments';
 
 import { useState } from 'react';
 
@@ -145,6 +148,33 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ListAccessLeaving />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='payments'
+              element={
+                <ProtectedRoute>
+                  <Payments />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='payments/add'
+              element={
+                <ProtectedRoute>
+                  <AddPaymentForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path='payments/list'
+              element={
+                <ProtectedRoute>
+                  <ListPayments />
                 </ProtectedRoute>
               }
             />

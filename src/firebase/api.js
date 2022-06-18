@@ -16,6 +16,7 @@ const vehiclesCollectionName = 'vehicles';
 const usersCollectionName = 'users';
 const accessLeavingCollectionName = 'accessLeaving';
 const slotsCollectionName = 'slots';
+const paymentsCollectionName = 'payments';
 
 export const registerVehicle = (newVehicle) =>
   addDoc(collection(db, vehiclesCollectionName), newVehicle);
@@ -26,6 +27,9 @@ export const registerUser = (newVehicle) =>
 export const registerAccesLeaving = (info) =>
   addDoc(collection(db, accessLeavingCollectionName), info);
 
+export const registerPayments = (info) =>
+  addDoc(collection(db, paymentsCollectionName), info);
+
 export const getVehicles = () =>
   getDocs(collection(db, vehiclesCollectionName));
 
@@ -35,6 +39,8 @@ export const getAccessLeaving = () =>
   getDocs(collection(db, accessLeavingCollectionName));
 
 export const getSlots = () => getDocs(collection(db, slotsCollectionName));
+
+export const getPayments = () => getDocs(collection(db, paymentsCollectionName));
 
 export const deleteVehicle = (id) =>
   deleteDoc(doc(db, vehiclesCollectionName, id));
